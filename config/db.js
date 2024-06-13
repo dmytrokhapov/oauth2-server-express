@@ -1,15 +1,17 @@
 const sql = require('mssql');
 
 const dbConfig = {
-    user: 'oauth',
-    password: '123123',
-    server: '(LocalDb)\MSSQLLocalDB',
-    database: 'oauth',
+    server: "ll-replicas.database.windows.net",
+    user: "DLPAdmin2",
+    password: "!Upwork2024",
+    database: "LLReplica_DLP1",
+    port: 1433,
+    authentication: {
+      type: "default",
+    },
     options: {
       encrypt: true,
-      trustServerCertificate: true,
     },
-    port: 1433,
 };
 
 
