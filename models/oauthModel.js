@@ -26,8 +26,8 @@ module.exports = {
             user: { id: user.id }
         };
     },
-    getUser: async (username, password) => {
-        const result = await sql.query`SELECT * FROM oauth_users WHERE username = ${username}`;
+    getUser: async (email, password) => {
+        const result = await sql.query`SELECT * FROM oauth_users WHERE email = ${email}`;
         if (result.recordset.length === 0) { 
             return null; 
         }
