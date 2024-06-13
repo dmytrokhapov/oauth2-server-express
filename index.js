@@ -7,16 +7,25 @@ const secureRoutes = require('./routes/secure');
 
 const app = express();
 
-// Database connection
-connectDB().then(async () => {
-    const hashedPassword = await bcrypt.hash('test_password', 10);
+(async () => {
+    try {
+        await connectDB();
 
-    // Insert test user with hashed password
-    await sql.query`INSERT INTO oauth_users (username, password, role, email, permissions) VALUES (N'test_user', ${hashedPassword}, N'ADMIN', N'test_user@example.com', N'Scope G')`;
+        const hashedPassword = await bcrypt.hash('test_password', 10);
+        
+        await sql.query`INSERT INTO oauth_clients (client_id, client_secret, redirect_uris, grant_types, scope)
+                        VALUES ('test_client', 'test_secret', 'http://localhost:8000/oauth/callback', 'password', 'read write')`;
 
-    console.log('Test user created successfully');
-    sql.close();
-});
+        await sql.query`INSERT INTO oauth_users (username, password, role, email, permissions)
+                        VALUES (N'test_user', ${hashedPassword}, N'ADMIN', N'test_user@example.com', N'Scope G')`;
+        
+        console.log('Test client and user created successfully');
+    } catch (err) {
+        console.error('Error creating test client and user:', err);
+    } finally {
+        sql.close();
+    }
+})();
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
